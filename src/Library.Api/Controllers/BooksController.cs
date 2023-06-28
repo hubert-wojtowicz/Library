@@ -17,9 +17,10 @@ public class BooksController : ControllerBase
 
     // TODO
     [HttpGet("/api/search")]
-    public async Task<string> Search([FromQuery] int next)
+    public async Task<IActionResult> Search([FromQuery] int next)
     {
-        return await Task.FromResult("");
+        var books = _dbContext.Books.ToList();
+        return Ok(books);
     }
 
 
