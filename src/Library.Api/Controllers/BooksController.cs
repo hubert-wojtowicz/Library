@@ -36,15 +36,24 @@ public class BooksController : ControllerBase
         if (book == null)
             return NotFound();
 
-        var reversed = string.Join(' ', book.Title.Split(',',' ',';', '.', '-').Reverse());
+        var reversed = string.Join(' ', book.Title.Split(',', ' ', ';', '.', '-').Reverse());
         return Ok(reversed);
     }
 
-    // TODO
     [HttpGet("report")]
-    public async Task<string> Report([FromQuery] string ids)
+    public async Task<IActionResult> Report()
     {
-        return await Task.FromResult("");
+        var report = await _dbContext.BooksTakens
+            .GroupBy(b => b.UserId)
+            .Select(g => new
+            {
+                UserDetails = g.Select(b => b.User).FirstOrDefault(),
+                TotalBooks = g.Count(),
+                TotalDays = g.Sum(b => EF.Functions.DateDiffDay(b.DateTaken, DateTime.Now))
+            })
+            .ToListAsync();
+
+        return Ok(report);
     }
 }
 
