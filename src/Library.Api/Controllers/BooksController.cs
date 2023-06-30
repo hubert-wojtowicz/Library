@@ -29,11 +29,15 @@ public class BooksController : ControllerBase
         return Ok(books);
     }
 
-    // TODO
-    [HttpGet("invertwords")]
-    public async Task<string> InvertWords([FromQuery] string ids)
+    [HttpGet("invertwords/{bookId}")]
+    public async Task<IActionResult> InvertWords(long bookId)
     {
-        return await Task.FromResult("");
+        var book = await _dbContext.Books.FirstOrDefaultAsync(book => book.Id == bookId);
+        if (book == null)
+            return NotFound();
+
+        var reversed = string.Join(' ', book.Title.Split(',',' ',';', '.', '-').Reverse());
+        return Ok(reversed);
     }
 
     // TODO
