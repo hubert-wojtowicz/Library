@@ -49,7 +49,7 @@ public class BooksController : ControllerBase
             {
                 UserDetails = g.Select(b => b.User).FirstOrDefault(),
                 TotalBooks = g.Count(),
-                TotalDays = g.Sum(b => EF.Functions.DateDiffDay(b.DateTaken, DateTime.Now))
+                TotalDays = g.Sum(b => EF.Functions.DateDiffDay(b.DateTaken, DateTime.UtcNow))
             })
             .ToListAsync();
 
