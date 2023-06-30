@@ -1,0 +1,85 @@
+{
+	"info": {
+		"_postman_id": "3b8b110c-5b1d-42d0-918e-5e21df0a63fc",
+		"name": "Library",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Search",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Operator\": \"AND\",\r\n    \"Left\": {\r\n        \"Operator\": \"CONTAINS\",\r\n        \"Condition\": {\r\n            \"PropertyName\": \"Title\",\r\n            \"Value\": \"The\"\r\n        }\r\n    },\r\n    \"Right\": {\r\n        \"Operator\": \"OR\",\r\n        \"Left\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"A\"\r\n            }\r\n        },\r\n        \"Right\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"by\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:56600/api/v1/Books/search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "56600",
+					"path": [
+						"api",
+						"v1",
+						"Books",
+						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reverse",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:56600/api/v1/Books/invertwords/18",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "56600",
+					"path": [
+						"api",
+						"v1",
+						"Books",
+						"invertwords",
+						"18"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Report",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:56600/api/v1/Books/report",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "56600",
+					"path": [
+						"api",
+						"v1",
+						"Books",
+						"report"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
