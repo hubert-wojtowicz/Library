@@ -1,3 +1,5 @@
+using Library.Api.ApplicationServices;
+using Library.Domain;
 using Library.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,6 +12,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// my registration
+builder.Services.AddSingleton<ITitleReverser, TitleReverser>();
+builder.Services.AddScoped<IBookApplicationService, BookApplicationService>();
 
 builder.Services.AddDbContext<LibraryDbContext>((serviceProvider, options) =>
 {

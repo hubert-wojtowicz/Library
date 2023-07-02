@@ -2,6 +2,9 @@ using Library.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Library.Infrastructure.Database.Search;
 using Microsoft.EntityFrameworkCore;
+using Library.Domain;
+using Library.Api.ApplicationServices;
+using System.Net;
 
 namespace Library.Api.Controllers;
 
@@ -9,12 +12,20 @@ namespace Library.Api.Controllers;
 [Route("/api/v1/[controller]")]
 public class BooksController : ControllerBase
 {
+    private readonly IBookApplicationService _bookApplicationService;
     private readonly ILogger<BooksController> _logger;
+    private readonly ITitleReverser _reverser;
     private readonly LibraryDbContext _dbContext;
 
-    public BooksController(ILogger<BooksController> logger, LibraryDbContext dbContext)
+    public BooksController(
+        IBookApplicationService bookApplicationService,
+        ILogger<BooksController> logger,
+        ITitleReverser reverser,
+        LibraryDbContext dbContext)
     {
+        _bookApplicationService = bookApplicationService;
         _logger = logger;
+        _reverser = reverser;
         _dbContext = dbContext;
     }
 
@@ -30,14 +41,10 @@ public class BooksController : ControllerBase
     }
 
     [HttpGet("invertwords/{bookId}")]
-    public async Task<IActionResult> InvertWords(long bookId)
+    public async Task<IActionResult> InvertWords(long bookId, [FromQuery] bool preserveSeparators = true)
     {
-        var book = await _dbContext.Books.FirstOrDefaultAsync(book => book.Id == bookId);
-        if (book == null)
-            return NotFound();
-
-        var reversed = string.Join(' ', book.Title.Split(',', ' ', ';', '.', '-').Reverse());
-        return Ok(reversed);
+        var operationResult = await _bookApplicationService.ReverseBookTitle(bookId, preserveSeparators);
+        return ToActionResult(operationResult);
     }
 
     [HttpGet("report")]
@@ -55,5 +62,11 @@ public class BooksController : ControllerBase
 
         return Ok(report);
     }
-}
 
+    private IActionResult ToActionResult<TResult>(OperationResult<TResult, ErrorResult> operationResult)
+    {
+        return operationResult.IsSuccessful ?
+            Ok(operationResult.Result) :
+            StatusCode((int)operationResult.Failure.StatusCode, operationResult.Failure.Message);
+    }
+}
