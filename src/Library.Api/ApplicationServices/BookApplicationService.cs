@@ -2,6 +2,7 @@
 using Library.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using Library.Api.ApplicationServices.Models;
 
 namespace Library.Api.ApplicationServices;
 
@@ -29,5 +30,20 @@ public class BookApplicationService : IBookApplicationService
             : _titleReverser.ReverseTitleLoosingSeparators(book.Title);
 
         return OperationResult<string, ErrorResult>.Succeed(result);
+    }
+
+    public async Task<OperationResult<List<UserReportModel>, ErrorResult>> CalculateUserBorrowingActivityReport()
+    {
+        var report = await _libraryDbContext.BooksTakens
+            .GroupBy(b => b.UserId)
+            .Select(g => new UserReportModel
+            {
+                UserDetails = g.Select(b => b.User).FirstOrDefault(),
+                TotalBooks = g.Count(),
+                TotalDays = g.Sum(b => EF.Functions.DateDiffDay(b.DateTaken, DateTime.UtcNow))
+            })
+            .ToListAsync();
+
+        return OperationResult<List<UserReportModel>, ErrorResult>.Succeed(report);
     }
 }

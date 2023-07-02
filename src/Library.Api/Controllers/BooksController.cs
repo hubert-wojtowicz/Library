@@ -2,9 +2,7 @@ using Library.Infrastructure.Database;
 using Microsoft.AspNetCore.Mvc;
 using Library.Infrastructure.Database.Search;
 using Microsoft.EntityFrameworkCore;
-using Library.Domain;
 using Library.Api.ApplicationServices;
-using System.Net;
 
 namespace Library.Api.Controllers;
 
@@ -13,19 +11,13 @@ namespace Library.Api.Controllers;
 public class BooksController : ControllerBase
 {
     private readonly IBookApplicationService _bookApplicationService;
-    private readonly ILogger<BooksController> _logger;
-    private readonly ITitleReverser _reverser;
     private readonly LibraryDbContext _dbContext;
 
     public BooksController(
         IBookApplicationService bookApplicationService,
-        ILogger<BooksController> logger,
-        ITitleReverser reverser,
         LibraryDbContext dbContext)
     {
         _bookApplicationService = bookApplicationService;
-        _logger = logger;
-        _reverser = reverser;
         _dbContext = dbContext;
     }
 
@@ -50,17 +42,8 @@ public class BooksController : ControllerBase
     [HttpGet("report")]
     public async Task<IActionResult> Report()
     {
-        var report = await _dbContext.BooksTakens
-            .GroupBy(b => b.UserId)
-            .Select(g => new
-            {
-                UserDetails = g.Select(b => b.User).FirstOrDefault(),
-                TotalBooks = g.Count(),
-                TotalDays = g.Sum(b => EF.Functions.DateDiffDay(b.DateTaken, DateTime.UtcNow))
-            })
-            .ToListAsync();
-
-        return Ok(report);
+        var operationResult = await _bookApplicationService.CalculateUserBorrowingActivityReport();
+        return ToActionResult(operationResult);
     }
 
     private IActionResult ToActionResult<TResult>(OperationResult<TResult, ErrorResult> operationResult)
