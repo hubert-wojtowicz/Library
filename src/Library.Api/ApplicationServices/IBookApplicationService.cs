@@ -8,7 +8,7 @@ public interface IBookApplicationService
 {
     Task<OperationResult<List<Book>, ErrorResult>> SearchBooks(BooksSearchFilter  filter);
 
-    Task<OperationResult<string, ErrorResult>> ReverseBookTitle(long bookId, bool preserveSeparators);
+    Task<OperationResult<BookWithReversedTittleDto, ErrorResult>> ReverseBookTitle(long bookId, bool preserveSeparators);
 
     Task<OperationResult<List<UserReportModel>, ErrorResult>> CalculateUserBorrowingActivityReport();
 }

@@ -31,9 +31,7 @@ public class BookApplicationService : IBookApplicationService
             var sqlFactory = new BooksSearchSqlFactory(filter);
             var sql = sqlFactory.CreateSql();
             var bookIds = await _libraryDbContext.Library.FromSqlRaw(sql).Select(b => b.Book).ToListAsync();
-
             return OperationResult<List<Book>, ErrorResult>.Succeed(bookIds);
-
         }
         catch (Exception e)
         {
@@ -43,18 +41,18 @@ public class BookApplicationService : IBookApplicationService
         }
     }
 
-    public async Task<OperationResult<string, ErrorResult>> ReverseBookTitle(long bookId, bool preserveSeparators)
+    public async Task<OperationResult<BookWithReversedTittleDto, ErrorResult>> ReverseBookTitle(long bookId, bool preserveSeparators)
     {
         var book = await _libraryDbContext.Books.FirstOrDefaultAsync(book => book.Id == bookId);
         if (book == null)
-            return OperationResult<string, ErrorResult>.Fail(
+            return OperationResult<BookWithReversedTittleDto, ErrorResult>.Fail(
                 new ErrorResult($"{nameof(bookId)} = '{bookId}' has not been found.", HttpStatusCode.NotFound));
 
-        var result = preserveSeparators
+        var reversedTitle = preserveSeparators
             ? _titleReverser.ReverseTitle(book.Title)
             : _titleReverser.ReverseTitleLoosingSeparators(book.Title);
 
-        return OperationResult<string, ErrorResult>.Succeed(result);
+        return OperationResult<BookWithReversedTittleDto, ErrorResult>.Succeed(BookWithReversedTittleDto.Create(book, reversedTitle));
     }
 
     public async Task<OperationResult<List<UserReportModel>, ErrorResult>> CalculateUserBorrowingActivityReport()
