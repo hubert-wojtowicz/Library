@@ -30,7 +30,7 @@ public class BooksController : ControllerBase
     [HttpPost("search")]
     public async Task<IActionResult> Search([FromBody] BooksSearchFilter filter)
     {
-        var operationResult = await _bookApplicationService.Search(filter);
+        var operationResult = await _bookApplicationService.SearchBooks(filter);
         return ToActionResult(operationResult);
     }
 

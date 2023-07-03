@@ -6,7 +6,7 @@ namespace Library.Api.ApplicationServices;
 
 public interface IBookApplicationService
 {
-    Task<OperationResult<List<LibrarySearchView>, ErrorResult>> Search(BooksSearchFilter  filter);
+    Task<OperationResult<List<Book>, ErrorResult>> SearchBooks(BooksSearchFilter  filter);
 
     Task<OperationResult<string, ErrorResult>> ReverseBookTitle(long bookId, bool preserveSeparators);
 

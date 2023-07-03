@@ -3,6 +3,7 @@
 public partial class LibrarySearchView
 {
     public long BookID { get; set; }
+    public Book Book { get; set; }
     public string Author { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }

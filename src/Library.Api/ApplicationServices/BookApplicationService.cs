@@ -24,21 +24,21 @@ public class BookApplicationService : IBookApplicationService
         _titleReverser = titleReverser;
     }
 
-    public async Task<OperationResult<List<LibrarySearchView>, ErrorResult>> Search(BooksSearchFilter filter)
+    public async Task<OperationResult<List<Book>, ErrorResult>> SearchBooks(BooksSearchFilter filter)
     {
         try
         {
             var sqlFactory = new BooksSearchSqlFactory(filter);
             var sql = sqlFactory.CreateSql();
-            var borrows = await _libraryDbContext.Library.FromSqlRaw(sql).ToListAsync();
+            var bookIds = await _libraryDbContext.Library.FromSqlRaw(sql).Select(b => b.Book).ToListAsync();
 
-            return OperationResult<List<LibrarySearchView>, ErrorResult>.Succeed(borrows);
+            return OperationResult<List<Book>, ErrorResult>.Succeed(bookIds);
 
         }
         catch (Exception e)
         {
             _logger.LogError(e, $"Failed searching Library with with message '{e.Message}' for filter '{JsonConvert.SerializeObject(filter)}'.");
-            return OperationResult<List<LibrarySearchView>, ErrorResult>.Fail(
+            return OperationResult<List<Book>, ErrorResult>.Fail(
                 new ErrorResult($"Failed to search Library '{e.Message}'", HttpStatusCode.BadRequest));
         }
     }
