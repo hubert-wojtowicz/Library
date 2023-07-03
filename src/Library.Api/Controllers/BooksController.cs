@@ -1,6 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Library.Infrastructure.Database.Search;
 using Library.Api.ApplicationServices;
+using Library.Infrastructure.Database;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Schema;
+using Newtonsoft.Json.Schema.Generation;
 
 namespace Library.Api.Controllers;
 
@@ -13,6 +17,14 @@ public class BooksController : ControllerBase
     public BooksController(IBookApplicationService bookApplicationService)
     {
         _bookApplicationService = bookApplicationService;
+    }
+
+    [HttpGet("searchSchema")]
+    public IActionResult Search()
+    {
+        JSchemaGenerator generator = new JSchemaGenerator();
+        JSchema schema = generator.Generate(typeof(LibrarySearchView));
+        return Ok(JsonConvert.SerializeObject(schema));
     }
 
     [HttpPost("search")]
