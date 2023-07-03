@@ -40,6 +40,6 @@ public class BooksController : ControllerBase
     {
         return operationResult.IsSuccessful
             ? Ok(operationResult.Result)
-            : StatusCode((int)operationResult.Failure.StatusCode, operationResult.Failure.Message);
+            : StatusCode((int)operationResult.Failure.StatusCode, new { errorMessage = operationResult.Failure.Message });
     }
 }
