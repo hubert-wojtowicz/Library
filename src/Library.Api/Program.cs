@@ -2,6 +2,8 @@ using Library.Api.ApplicationServices;
 using Library.Domain;
 using Library.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using System.Net.NetworkInformation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,15 @@ builder.Services.AddDbContext<LibraryDbContext>((serviceProvider, options) =>
     var connectionString = config!.GetConnectionString(nameof(LibraryDbContext));
     options.UseSqlServer(connectionString);
 });
+
+using var serviceScope = builder.Services.BuildServiceProvider().CreateScope();
+{
+    var dbContext = serviceScope.ServiceProvider.GetRequiredService<LibraryDbContext>();
+    if (dbContext.Database.GetPendingMigrations().Any())
+    {
+        dbContext.Database.Migrate();
+    }
+}
 
 var app = builder.Build();
 
