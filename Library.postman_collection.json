@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Operator\": \"AND\",\r\n    \"Left\": {\r\n        \"Operator\": \"CONTAINS\",\r\n        \"Condition\": {\r\n            \"PropertyName\": \"Title\",\r\n            \"Value\": \"The\"\r\n        }\r\n    },\r\n    \"Right\": {\r\n        \"Operator\": \"OR\",\r\n        \"Left\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"A\"\r\n            }\r\n        },\r\n        \"Right\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"by\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"Operator\": \"AND\",\r\n    \"Left\": {\r\n        \"Operator\": \"CONTAINS\",\r\n        \"Condition\": {\r\n            \"PropertyName\": \"Title\",\r\n            \"Value\": \"The\"\r\n        }\r\n    },\r\n    \"Right\": {\r\n        \"Operator\": \"OR\",\r\n        \"Left\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"A\"\r\n            }\r\n        },\r\n        \"Right\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"by a\"\r\n            }\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
