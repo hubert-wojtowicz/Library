@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"Operator\": \"AND\",\r\n    \"Left\": {\r\n        \"Operator\": \"CONTAINS\",\r\n        \"Condition\": {\r\n            \"PropertyName\": \"Title\",\r\n            \"Value\": \"The\"\r\n        }\r\n    },\r\n    \"Right\": {\r\n        \"Operator\": \"OR\",\r\n        \"Left\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"A\"\r\n            }\r\n        },\r\n        \"Right\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"by a\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"raw": "{\r\n    \"Operator\": \"AND\",\r\n    \"Left\": {\r\n        \"Operator\": \"CONTAINS\",\r\n        \"Condition\": {\r\n            \"PropertyName\": \"Author\",\r\n            \"Value\": \"Ernest\"\r\n        }\r\n    },\r\n    \"Right\": {\r\n        \"Operator\": \"OR\",\r\n        \"Left\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"A\"\r\n            }\r\n        },\r\n        \"Right\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"by a\"\r\n            }\r\n        }\r\n    }\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -31,6 +31,40 @@
 						"v1",
 						"Books",
 						"search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "SearchSchema",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Operator\": \"AND\",\r\n    \"Left\": {\r\n        \"Operator\": \"CONTAINS\",\r\n        \"Condition\": {\r\n            \"PropertyName\": \"Author\",\r\n            \"Value\": \"Ernest\"\r\n        }\r\n    },\r\n    \"Right\": {\r\n        \"Operator\": \"OR\",\r\n        \"Left\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"A\"\r\n            }\r\n        },\r\n        \"Right\": {\r\n            \"Operator\": \"CONTAINS\",\r\n            \"Condition\": {\r\n                \"PropertyName\": \"Description\",\r\n                \"Value\": \"by a\"\r\n            }\r\n        }\r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:56600/api/v1/Books/searchSchema",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "56600",
+					"path": [
+						"api",
+						"v1",
+						"Books",
+						"searchSchema"
 					]
 				}
 			},
