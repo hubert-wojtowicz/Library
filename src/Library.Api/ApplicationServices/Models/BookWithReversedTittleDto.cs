@@ -2,27 +2,16 @@
 
 namespace Library.Api.ApplicationServices.Models;
 
-public class BookWithReversedTittleDto
+public class BookWithReversedTittleDto : BookDto
 {
-    public long Id { get; set; }
-
-    public string Title { get; set; } = null!;
-
     public string TitleReversed { get; set; } = null!;
 
-    public string? Description { get; set; }
-
-    public long AuthorId { get; set; }
-
-    public static BookWithReversedTittleDto Create(Book book, string reversedTitle)
+    public static BookWithReversedTittleDto Create(Book book, string reversedTitle) => new()
     {
-        return new BookWithReversedTittleDto
-        {
-            Id = book.Id,
-            Title = book.Title,
-            TitleReversed = reversedTitle,
-            Description = book.Description,
-            AuthorId = book.AuthorId,
-        };
-    }
+        TitleReversed = reversedTitle,
+        Id = book.Id,
+        Title = book.Title,
+        Description = book.Description,
+        AuthorId = book.AuthorId,
+    };
 }

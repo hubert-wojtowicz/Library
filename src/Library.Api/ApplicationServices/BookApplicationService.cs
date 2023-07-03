@@ -24,19 +24,23 @@ public class BookApplicationService : IBookApplicationService
         _titleReverser = titleReverser;
     }
 
-    public async Task<OperationResult<List<Book>, ErrorResult>> SearchBooks(BooksSearchFilter filter)
+    public async Task<OperationResult<List<BookDto>, ErrorResult>> SearchBooks(BooksSearchFilter filter)
     {
         try
         {
             var sqlFactory = new BooksSearchSqlFactory(filter);
             var sql = sqlFactory.CreateSql();
-            var bookIds = await _libraryDbContext.Library.FromSqlRaw(sql).Select(b => b.Book).ToListAsync();
-            return OperationResult<List<Book>, ErrorResult>.Succeed(bookIds);
+            var books = await _libraryDbContext.Library
+                .FromSqlRaw(sql)
+                .Select(b => BookDto.Create(b.Book))
+                .ToListAsync();
+
+            return OperationResult<List<BookDto>, ErrorResult>.Succeed(books);
         }
         catch (Exception e)
         {
             _logger.LogError(e, $"Failed searching Library with with message '{e.Message}' for filter '{JsonConvert.SerializeObject(filter)}'.");
-            return OperationResult<List<Book>, ErrorResult>.Fail(
+            return OperationResult<List<BookDto>, ErrorResult>.Fail(
                 new ErrorResult($"Failed to search Library '{e.Message}'", HttpStatusCode.BadRequest));
         }
     }
@@ -55,11 +59,11 @@ public class BookApplicationService : IBookApplicationService
         return OperationResult<BookWithReversedTittleDto, ErrorResult>.Succeed(BookWithReversedTittleDto.Create(book, reversedTitle));
     }
 
-    public async Task<OperationResult<List<UserReportModel>, ErrorResult>> CalculateUserBorrowingActivityReport()
+    public async Task<OperationResult<List<UserReportDto>, ErrorResult>> CalculateUserBorrowingActivityReport()
     {
         var report = await _libraryDbContext.BooksTakens
             .GroupBy(b => b.UserId)
-            .Select(g => new UserReportModel
+            .Select(g => new UserReportDto
             {
                 UserDetails = g.Select(b => b.User).FirstOrDefault(),
                 TotalBooks = g.Count(),
@@ -67,6 +71,6 @@ public class BookApplicationService : IBookApplicationService
             })
             .ToListAsync();
 
-        return OperationResult<List<UserReportModel>, ErrorResult>.Succeed(report);
+        return OperationResult<List<UserReportDto>, ErrorResult>.Succeed(report);
     }
 }

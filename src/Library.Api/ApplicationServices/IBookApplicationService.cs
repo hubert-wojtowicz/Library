@@ -6,9 +6,9 @@ namespace Library.Api.ApplicationServices;
 
 public interface IBookApplicationService
 {
-    Task<OperationResult<List<Book>, ErrorResult>> SearchBooks(BooksSearchFilter  filter);
+    Task<OperationResult<List<BookDto>, ErrorResult>> SearchBooks(BooksSearchFilter  filter);
 
     Task<OperationResult<BookWithReversedTittleDto, ErrorResult>> ReverseBookTitle(long bookId, bool preserveSeparators);
 
-    Task<OperationResult<List<UserReportModel>, ErrorResult>> CalculateUserBorrowingActivityReport();
+    Task<OperationResult<List<UserReportDto>, ErrorResult>> CalculateUserBorrowingActivityReport();
 }
