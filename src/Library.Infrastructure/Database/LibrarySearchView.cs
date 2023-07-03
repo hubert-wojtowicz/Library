@@ -1,8 +1,8 @@
 ﻿namespace Library.Infrastructure.Database;
 
-public partial class LibrarySearch
+public partial class LibrarySearchView
 {
-    public int BookID { get; set; }
+    public long BookID { get; set; }
     public string Author { get; set; }
     public string Title { get; set; }
     public string Description { get; set; }

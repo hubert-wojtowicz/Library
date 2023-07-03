@@ -6,7 +6,7 @@ public class BooksSearchSqlFactory
 {
     private StringBuilder _sb;
 
-    public string CreateSql() => $"SELECT * FROM dbo.Book WHERE {_sb}";
+    public string CreateSql() => $"SELECT * FROM dbo.LibrarySearchView WHERE {_sb}";
 
     public BooksSearchSqlFactory(BooksSearchFilter node)
     {

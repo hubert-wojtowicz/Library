@@ -21,8 +21,17 @@ public partial class LibraryDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<LibrarySearchView> Library { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder
+            .Entity<LibrarySearchView>(eb =>
+            {
+                eb.HasNoKey();
+                eb.ToView("LibrarySearchView", "dbo");
+            });
+
         modelBuilder.Entity<Author>(entity =>
         {
             entity.ToTable("Author", "dbo");
@@ -35,7 +44,7 @@ public partial class LibraryDbContext : DbContext
 
         modelBuilder.Entity<Book>(entity =>
         {
-            entity.ToTable("Book","dbo");
+            entity.ToTable("Book", "dbo");
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.AuthorId).HasColumnName("AuthorID");
