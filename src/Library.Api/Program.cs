@@ -2,8 +2,6 @@ using Library.Api.ApplicationServices;
 using Library.Domain;
 using Library.Infrastructure.Database;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using System.Net.NetworkInformation;
 
 var builder = WebApplication.CreateBuilder(args);
 

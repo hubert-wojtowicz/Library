@@ -6,9 +6,8 @@ public class BooksSearchFilter
 {
     public BooksSearchFilter? Left { get; set; }
 
-    [Required(ErrorMessage = "Operator is required.")]
     [RegularExpression("^(AND|OR|EQUAL|CONTAINS)$", ErrorMessage = "Operator must be out of values: 'AND', 'OR', 'EQUAL' or 'CONTAINS'.")]
-    public string Operator { get; set; }
+    public string? Operator { get; set; }
 
     public BooksSearchFilter? Right { get; set; }
 

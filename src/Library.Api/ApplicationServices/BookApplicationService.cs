@@ -28,12 +28,13 @@ public class BookApplicationService : IBookApplicationService
     {
         try
         {
-            var sqlFactory = new BooksSearchSqlFactory(filter);
-            var sql = sqlFactory.CreateSql();
-            var books = await _libraryDbContext.Library
-                .FromSqlRaw(sql)
-                .Select(b => BookDto.Create(b.Book))
-                .ToListAsync();
+            var books = await _libraryDbContext.Library.WhereBooks(filter).Select(b => new BookDto()
+            {
+                AuthorId = b.Book.AuthorId,
+                Description = b.Book.Description,
+                Id = b.Book.Id,
+                Title = b.Book.Title
+            }).ToListAsync();
 
             return OperationResult<List<BookDto>, ErrorResult>.Succeed(books);
         }
@@ -70,6 +71,39 @@ public class BookApplicationService : IBookApplicationService
                 TotalDays = g.Sum(b => EF.Functions.DateDiffDay(b.DateTaken, DateTime.UtcNow))
             })
             .ToListAsync();
+
+
+        /*
+            FROM (
+                SELECT COUNT(*) AS [c]
+                    ,COALESCE(SUM(DATEDIFF(day, [b].[DateTaken], GETUTCDATE())), 0) AS [c0]
+                    ,[b].[UserID]
+                FROM [dbo].[BooksTaken] AS [b]
+                GROUP BY [b].[UserID]
+                ) AS [t]
+            LEFT JOIN (
+                SELECT [t1].[ID]
+                    ,[t1].[Email]
+                    ,[t1].[FirstName]
+                    ,[t1].[LastName]
+                    ,[t1].[UserID]
+                FROM (
+                    SELECT [u].[ID]
+                        ,[u].[Email]
+                        ,[u].[FirstName]
+                        ,[u].[LastName]
+                        ,[b0].[UserID]
+                        ,ROW_NUMBER() OVER (
+                            PARTITION BY [b0].[UserID] ORDER BY (
+                                    SELECT 1
+                                    )
+                            ) AS [row]
+                    FROM [dbo].[BooksTaken] AS [b0]
+                    INNER JOIN [dbo].[User] AS [u] ON [b0].[UserID] = [u].[ID]
+                    ) AS [t1]
+                WHERE [t1].[row] <= 1
+                ) AS [t0] ON [t].[UserID] = [t0].[UserID]
+         */
 
         return OperationResult<List<UserReportDto>, ErrorResult>.Succeed(report);
     }
